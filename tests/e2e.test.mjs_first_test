@@ -1,0 +1,70 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+
+const actor = process.env.ACTOR_BASE_URL?.replace(/\/$/, "");
+const edge = process.env.EDGE_FUNCTION_URL?.replace(/\/$/, "");
+const auth = process.env.MCP_AUTH_TOKEN;
+const skip = !actor || !edge;
+
+async function json(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+    headers: { "content-type": "application/json", ...(options.headers ?? {}) },
+  });
+  const body = await response.json();
+  assert.equal(response.ok, true, `${url} returned ${response.status}: ${JSON.stringify(body)}`);
+  return body;
+}
+
+test("deployed Edge Function and Stateful Actor end-to-end smoke test", { skip }, async () => {
+  const session = `precall-${Date.now()}`;
+
+  const actorHealth = await fetch(`${actor}/health/liveness`);
+  assert.equal(actorHealth.ok, true);
+
+  const initialized = await json(`${actor}/sessions/${session}/initialize`, {
+    method: "POST", body: JSON.stringify({ language: "sv-SE", event_id: "e1" }),
+  });
+  assert.equal(initialized.language, "sv-SE");
+
+  await json(`${actor}/sessions/${session}/callback`, {
+    method: "POST", body: JSON.stringify({ name: "Demo Caller", number: "+46700000000", confirmed: true }),
+  });
+  const queuedCallback = await json(`${actor}/sessions/${session}/queue-callback`, {
+    method: "POST", body: JSON.stringify({ request_id: `callback-${Date.now()}` }),
+  });
+  assert.equal(queuedCallback.status, "queued");
+
+  const queuedLive = await json(`${actor}/sessions/${session}/queue-live`, {
+    method: "POST", body: JSON.stringify({ ticket_id: `ticket-${Date.now()}` }),
+  });
+  assert.equal(queuedLive.live_queue_status, "queued");
+
+  const state = await json(`${actor}/sessions/${session}/state`);
+  assert.equal(state.session_id, session);
+  assert.equal(state.callback_confirmed, true);
+
+  const information = await json(`${edge}/api/information`, {
+    method: "POST", body: JSON.stringify({ session_id: session, topic: "deadlines", language: "en-US" }),
+  });
+  assert.match(information.result.answer, /deadline/i);
+
+  const callback = await json(`${edge}/api/callback`, {
+    method: "POST",
+    body: JSON.stringify({ session_id: session, callback_name: "Demo Caller", callback_number: "+46700000000", language: "sv-SE" }),
+  });
+  assert.equal(callback.result.status, "queued");
+
+  const transfer = await json(`${edge}/api/transfer`, {
+    method: "POST",
+    body: JSON.stringify({ session_id: session, language: "sv-SE" }),
+  });
+  assert.equal(transfer.result.queue, "live_tax_assistance");
+
+  const mcp = await json(`${edge}/mcp`, {
+    method: "POST",
+    headers: auth ? { authorization: `Bearer ${auth}` } : {},
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" }),
+  });
+  assert.equal(mcp.result.tools.length, 4);
+});

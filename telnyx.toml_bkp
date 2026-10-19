@@ -1,0 +1,14 @@
+name = "skatteverket-state-services"
+main = "src/index.ts"
+compatibility_date = "2026-05-01"
+
+[[actors]]
+binding = "CALL_SESSION"
+type = "CallSession"
+
+[storage.kv.STATE_KV]
+id = "0499a35f-9895-47b5-8a72-70ae7bfd3226"
+
+[edge_compute]
+func_id = "01b0e7b6-1bbc-4ac6-bc0f-2339afdb9b38"
+func_name = "skatteverket-state-services"

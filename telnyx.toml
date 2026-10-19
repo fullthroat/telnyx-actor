@@ -6,9 +6,6 @@ compatibility_date = "2026-05-01"
 binding = "CALL_SESSION"
 type = "CallSession"
 
-[storage.kv.STATE_KV]
-id = "ff30fe7b-4cf7-4670-8724-c5cc18bde421"
-
 [edge_compute]
 func_id = "01b0e7b6-1bbc-4ac6-bc0f-2339afdb9b38"
 func_name = "skatteverket-state-services"
