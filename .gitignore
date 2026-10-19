@@ -1,0 +1,173 @@
+
+# ==========================================
+# LOGS
+# ==========================================
+*.log
+*.log.*
+logs/
+log/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.trace
+*.pid
+*.pid.lock
+
+# ==========================================
+# SECRETS, TOKENS & CREDENTIALS
+# ==========================================
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+
+*.secret
+*.secrets
+*.credentials
+secrets/
+credentials/
+private/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.asc
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+
+# Cloud credentials
+.aws/
+.azure/
+.gcloud/
+service-account*.json
+serviceAccountKey.json
+
+# ==========================================
+# LOCAL CONFIGURATION
+# ==========================================
+config.local.*
+config.*.local.*
+settings.local.*
+settings.*.local.*
+application-local.yml
+application-local.yaml
+application-local.properties
+application-secret.yml
+application-secret.yaml
+application-secret.properties
+docker-compose.override.yml
+docker-compose.override.yaml
+.envrc
+
+# ==========================================
+# PYTHON
+# ==========================================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# ==========================================
+# NODE.JS / REACT / NEXT.JS
+# ==========================================
+node_modules/
+.npm/
+.pnpm-store/
+.next/
+.nuxt/
+.cache/
+.parcel-cache/
+coverage/
+dist/
+build/
+.vite/
+*.tsbuildinfo
+
+# ==========================================
+# JAVA / MAVEN / GRADLE
+# ==========================================
+target/
+.gradle/
+out/
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+replay_pid*
+
+# ==========================================
+# DOCKER / CONTAINERS
+# ==========================================
+docker-data/
+volumes/
+docker-volumes/
+*.container.log
+
+# ==========================================
+# DATABASES / LOCAL DATA
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+*.dump
+*.bak
+*.backup
+
+# ==========================================
+# IDE / EDITORS
+# ==========================================
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ==========================================
+# OS / TEMPORARY FILES
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+tmp/
+temp/
+.cache/
+*.tmp
+*.temp
+*.orig
+
+# ==========================================
+# TERRAFORM
+# ==========================================
+.terraform/
+.terraform.tfstate.lock.info
+crash.log
+crash.*.log
